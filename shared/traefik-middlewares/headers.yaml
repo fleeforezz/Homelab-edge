@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: secure-headers
+spec:
+  headers:
+    frameDeny: true
+    contentTypeNosniff: true
+    browserXssFilter: true
+    referrerPolicy: "no-referrer-when-downgrade"
+    featurePolicy:
+      features:
+        - "geolocation 'none'"
+        - "microphone 'none'"
+        - "camera 'none'"
+        - "fullscreen 'self'"
+    customResponseHeaders:
+      X-Custom-Header: "MyCustomValue"
