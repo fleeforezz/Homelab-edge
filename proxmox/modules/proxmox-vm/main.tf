@@ -63,6 +63,7 @@ resource "proxmox_vm_qemu" "vm" {
     bridge   = var.network_bridge
     firewall = true
     model    = "virtio"
+    tag      = var.vlan_tag
   }
   ipconfig0  = "ip=${var.ip_address},gw=${var.gateway}"
   nameserver = var.nameserver

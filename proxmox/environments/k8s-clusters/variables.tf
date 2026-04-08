@@ -35,7 +35,7 @@ variable "proxmox_tls_insecure" {
 variable "proxmox_node" {
   description = "Proxmox node name"
   type        = string
-  default     = "pve1"
+  default     = "pve"
 }
 
 // Environment name variable
@@ -75,14 +75,21 @@ variable "cipassword" {
 variable "storage_pool" {
   description = "Storage pool name"
   type        = string
-  default     = "SlowZ1"
+  default     = "EVO-500"
 }
 
 // Network bridge variable
 variable "network_bridge" {
   description = "Network bridge"
   type        = string
-  default     = "vmbr1"
+  default     = "vmbr"
+}
+
+// VLAN Tag
+variable "vlan_tag" {
+  description = "VLAN tag for VM network"
+  type = number
+  default = 10
 }
 
 // DNS nameserver variable

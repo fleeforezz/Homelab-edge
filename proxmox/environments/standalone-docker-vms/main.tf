@@ -1,6 +1,6 @@
 locals {
   environment  = "standalone-docker-vms"
-  network_base = "10.0.1"
+  network_base = "10.0.10"
   common_tags = {
     Environment = local.environment
     Managed_by  = "terraform"
@@ -23,43 +23,13 @@ provider "proxmox" {
   pm_tls_insecure     = var.proxmox_tls_insecure
 }
 
-#=======================
-# Media Stack Server
-#=======================
-module "media_stack_server" {
-  source = "../../modules/proxmox-vm"
-
-  vmid           = 301
-  vm_name        = "Media-stack"
-  target_node    = var.proxmox_node
-  clone_template = var.vm_template
-  display_type   = var.display_type
-
-  cpu_cores    = 4
-  memory_mb    = 4096
-  disk_size_gb = 32
-  storage_pool = var.storage_pool
-
-  network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.70/24"
-  gateway        = "${local.network_base}.1"
-  nameserver     = var.nameserver
-
-  ciuser         = var.ciuser
-  cipassword     = var.cipassword
-  ssh_public_key = join("\n", var.ssh_public_key)
-  tags           = var.environment
-
-  description = "Media Stack Server - ${local.environment}"
-}
-
 #=========================
 # Personal Service Server
 #=========================
 module "per_server" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 302
+  vmid           = 301
   vm_name        = "Personal-services"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
@@ -71,7 +41,7 @@ module "per_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.71/24"
+  ip_address     = "${local.network_base}.70/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -89,7 +59,7 @@ module "per_server" {
 module "database_server" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 303
+  vmid           = 302
   vm_name        = "Databases"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
@@ -97,11 +67,11 @@ module "database_server" {
 
   cpu_cores    = 4
   memory_mb    = 8192
-  disk_size_gb = 32
+  disk_size_gb = 15
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.72/24"
+  ip_address     = "${local.network_base}.71/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -127,11 +97,11 @@ module "s3_storage_server" {
 
   cpu_cores    = 4
   memory_mb    = 8192
-  disk_size_gb = 32
+  disk_size_gb = 15
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.73/24"
+  ip_address     = "${local.network_base}.72/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -149,7 +119,7 @@ module "s3_storage_server" {
 module "development_server" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 305
+  vmid           = 304
   vm_name        = "Development"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
@@ -161,7 +131,7 @@ module "development_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.74/24"
+  ip_address     = "${local.network_base}.73/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -179,7 +149,7 @@ module "development_server" {
 module "reverse_proxy_server" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 306
+  vmid           = 305
   vm_name        = "Reverse-proxy"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
@@ -191,7 +161,7 @@ module "reverse_proxy_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.75/24"
+  ip_address     = "${local.network_base}.74/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 

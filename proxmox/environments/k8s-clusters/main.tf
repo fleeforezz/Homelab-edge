@@ -1,6 +1,6 @@
 locals {
   environment  = "k8s-clusters"
-  network_base = "10.0.1"
+  network_base = "10.0.10"
   common_tags = {
     Environment = local.environment
     Managed_by  = "terraform"
@@ -9,7 +9,7 @@ locals {
 
 terraform {
   required_providers {
-    proxmox = {
+      proxmox = {
       source  = "telmate/proxmox"
       version = "3.0.2-rc07"
     }
@@ -56,62 +56,62 @@ module "k8s_manager_1" {
 #==============
 # K8s manager 2
 #==============
-module "k8s_manager_2" {
-  source = "../../modules/proxmox-vm"
+# module "k8s_manager_2" {
+#   source = "../../modules/proxmox-vm"
 
-  vmid           = 151
-  vm_name        = "k8s-manager-2"
-  target_node    = var.proxmox_node
-  clone_template = var.vm_template
-  display_type   = var.display_type
+#   vmid           = 151
+#   vm_name        = "k8s-manager-2"
+#   target_node    = var.proxmox_node
+#   clone_template = var.vm_template
+#   display_type   = var.display_type
 
-  cpu_cores    = 4
-  memory_mb    = 8192
-  disk_size_gb = 32
-  storage_pool = var.storage_pool
+#   cpu_cores    = 4
+#   memory_mb    = 8192
+#   disk_size_gb = 32
+#   storage_pool = var.storage_pool
 
-  network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.52/24"
-  gateway        = "${local.network_base}.1"
-  nameserver     = var.nameserver
+#   network_bridge = var.network_bridge
+#   ip_address     = "${local.network_base}.52/24"
+#   gateway        = "${local.network_base}.1"
+#   nameserver     = var.nameserver
 
-  ciuser         = var.ciuser
-  cipassword     = var.cipassword
-  ssh_public_key = join("\n", var.ssh_public_key)
-  tags           = var.environment
+#   ciuser         = var.ciuser
+#   cipassword     = var.cipassword
+#   ssh_public_key = join("\n", var.ssh_public_key)
+#   tags           = var.environment
 
-  description = "K8s manager 2 - ${local.environment}"
-}
+#   description = "K8s manager 2 - ${local.environment}"
+# }
 
 #==============
 # K8s manager 3
 #==============
-module "k8s_manager_3" {
-  source = "../../modules/proxmox-vm"
+# module "k8s_manager_3" {
+#   source = "../../modules/proxmox-vm"
 
-  vmid           = 152
-  vm_name        = "k8s-manager-3"
-  target_node    = var.proxmox_node
-  clone_template = var.vm_template
-  display_type   = var.display_type
+#   vmid           = 152
+#   vm_name        = "k8s-manager-3"
+#   target_node    = var.proxmox_node
+#   clone_template = var.vm_template
+#   display_type   = var.display_type
 
-  cpu_cores    = 4
-  memory_mb    = 8192
-  disk_size_gb = 32
-  storage_pool = var.storage_pool
+#   cpu_cores    = 4
+#   memory_mb    = 8192
+#   disk_size_gb = 32
+#   storage_pool = var.storage_pool
 
-  network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.53/24"
-  gateway        = "${local.network_base}.1"
-  nameserver     = var.nameserver
+#   network_bridge = var.network_bridge
+#   ip_address     = "${local.network_base}.53/24"
+#   gateway        = "${local.network_base}.1"
+#   nameserver     = var.nameserver
 
-  ciuser         = var.ciuser
-  cipassword     = var.cipassword
-  ssh_public_key = join("\n", var.ssh_public_key)
-  tags           = var.environment
+#   ciuser         = var.ciuser
+#   cipassword     = var.cipassword
+#   ssh_public_key = join("\n", var.ssh_public_key)
+#   tags           = var.environment
 
-  description = "K8s manager 3 - ${local.environment}"
-}
+#   description = "K8s manager 3 - ${local.environment}"
+# }
 
 #==============
 # K8s worker 1

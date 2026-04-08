@@ -1,15 +1,3 @@
-#===================
-# Media Stack Server
-#===================
-output "media_stack_server" {
-  description = "Media Stack Server"
-  value = {
-    name       = module.media_stack_server.vm_name
-    ip_address = module.media_stack_server.ip_address
-    vm_id      = module.media_stack_server.vm_id
-  }
-}
-
 #========================
 # Personal Service Server
 #========================

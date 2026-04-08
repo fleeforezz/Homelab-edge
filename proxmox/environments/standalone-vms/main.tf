@@ -1,6 +1,6 @@
 locals {
   environment  = "standalone-vms"
-  network_base = "10.0.1"
+  network_base = "10.0.10"
   common_tags = {
     Environment = local.environment
     Managed_by  = "terraform"
@@ -26,92 +26,62 @@ provider "proxmox" {
 #==============
 # Gitlab Server
 #==============
-# module "gitlab_server" {
-#   source = "../../modules/proxmox_vm"
+module "gitlab_server" {
+  source = "../../modules/proxmox_vm"
 
-#   vmid           = 401
-#   vm_name        = "gitlab"
-#   target_node    = var.proxmox_node
-#   clone_template = var.vm_template
-#   display_type   = var.display_type
+  vmid           = 400
+  vm_name        = "gitlab"
+  target_node    = var.proxmox_node
+  clone_template = var.vm_template
+  display_type   = var.display_type
 
-#   cpu_cores    = 8
-#   memory_mb    = 16144
-#   disk_size_gb = 32
-#   storage_pool = var.storage_pool
+  cpu_cores    = 8
+  memory_mb    = 16144
+  disk_size_gb = 32
+  storage_pool = var.storage_pool
 
-#   network_bridge = var.network_bridge
-#   ip_address     = "${local.network_base}.77/24"
-#   gateway        = "${local.network_base}.1"
-#   nameserver     = var.nameserver
+  network_bridge = var.network_bridge
+  ip_address     = "${local.network_base}.77/24"
+  gateway        = "${local.network_base}.1"
+  nameserver     = var.nameserver
 
-#   ciuser         = var.ciuser
-#   cipassword     = var.cipassword
-#   ssh_public_key = join("\n", var.ssh_public_key)
-#   tags           = var.environment
+  ciuser         = var.ciuser
+  cipassword     = var.cipassword
+  ssh_public_key = join("\n", var.ssh_public_key)
+  tags           = var.environment
 
-#   description = "Gitlab Server - ${local.environment}"
-# }
+  description = "Gitlab Server - ${local.environment}"
+}
 
 #===============
 # Jenkins Server
 #===============
-# module "jenkins_server" {
-#   source = "../../modules/proxmox_vm"
+module "jenkins_server" {
+  source = "../../modules/proxmox_vm"
 
-#   vmid           = 402
-#   vm_name        = "jenkins"
-#   target_node    = var.proxmox_node
-#   clone_template = var.vm_template
-#   display_type   = var.display_type
+  vmid           = 401
+  vm_name        = "jenkins"
+  target_node    = var.proxmox_node
+  clone_template = var.vm_template
+  display_type   = var.display_type
 
-#   cpu_cores    = 4
-#   memory_mb    = 8192
-#   disk_size_gb = 32
-#   storage_pool = var.storage_pool
+  cpu_cores    = 4
+  memory_mb    = 8192
+  disk_size_gb = 32
+  storage_pool = var.storage_pool
 
-#   network_bridge = var.network_bridge
-#   ip_address     = "${local.network_base}.78/24"
-#   gateway        = "${local.network_base}.1"
-#   nameserver     = var.nameserver
+  network_bridge = var.network_bridge
+  ip_address     = "${local.network_base}.78/24"
+  gateway        = "${local.network_base}.1"
+  nameserver     = var.nameserver
 
-#   ciuser         = var.ciuser
-#   cipassword     = var.cipassword
-#   ssh_public_key = join("\n", var.ssh_public_key)
-#   tags           = var.environment
+  ciuser         = var.ciuser
+  cipassword     = var.cipassword
+  ssh_public_key = join("\n", var.ssh_public_key)
+  tags           = var.environment
 
-#   description = "Jenkins Server - ${local.environment}"
-# }
-
-#=====================
-# Pi-Hole Server
-#=====================
-# module "pihole_server" {
-#   source = "../../modules/proxmox_vm"
-
-#   vmid           = 403
-#   vm_name        = "pihole"
-#   target_node    = var.proxmox_node
-#   clone_template = var.vm_template
-#   display_type   = var.display_type
-
-#   cpu_cores    = 2
-#   memory_mb    = 2048
-#   disk_size_gb = 15
-#   storage_pool = var.storage_pool
-
-#   network_bridge = var.network_bridge
-#   ip_address     = "${local.network_base}.79/24"
-#   gateway        = "${local.network_base}.1"
-#   nameserver     = var.nameserver
-
-#   ciuser         = var.ciuser
-#   cipassword     = var.cipassword
-#   ssh_public_key = join("\n", var.ssh_public_key)
-#   tags           = var.environment
-
-#   description = "Pi-Hole Server - ${local.environment}"
-# }
+  description = "Jenkins Server - ${local.environment}"
+}
 
 #================
 # Cockpit Server
@@ -119,7 +89,7 @@ provider "proxmox" {
 module "cockpit_server" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 404
+  vmid           = 402
   vm_name        = "cockpit"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
@@ -143,63 +113,32 @@ module "cockpit_server" {
   description = "Cockpit Server - ${local.environment}"
 }
 
-#================
-# HomeAssistant Server
-#================
-# module "homeassistant_server" {
-#   source = "../../modules/proxmox_vm"
-
-#   vmid           = 405
-#   vm_name        = "homeassistant"
-#   target_node    = var.proxmox_node
-#   clone_template = var.vm_template
-#   display_type   = var.display_type
-
-#   cpu_cores    = 4
-#   memory_mb    = 8192
-#   disk_size_gb = 32
-#   storage_pool = var.storage_pool
-
-#   network_bridge = var.network_bridge
-#   ip_address     = "${local.network_base}.81/24"
-#   gateway        = "${local.network_base}.1"
-#   nameserver     = var.nameserver
-
-#   ciuser         = var.ciuser
-#   cipassword     = var.cipassword
-#   ssh_public_key = join("\n", var.ssh_public_key)
-#   tags           = var.environment
-
-#   description = "HomeAssistant Server - ${local.environment}"
-# }
-
 #===========================
 # K8s clusters Load Balancer
 #===========================
-# module "k8s_lb_server" {
-#   source = "../../modules/proxmox-vm"
+module "k8s_lb_server" {
+  source = "../../modules/proxmox-vm"
 
-#   vmid           = 406
-#   vm_name        = "k8s-load-balancer"
-#   target_node    = var.proxmox_node
-#   clone_template = var.vm_template
-#   display_type   = var.display_type
+  vmid           = 403
+  vm_name        = "k8s-load-balancer"
+  target_node    = var.proxmox_node
+  clone_template = var.vm_template
+  display_type   = var.display_type
 
-#   cpu_cores    = 4
-#   memory_mb    = 4096
-#   disk_size_gb = 16
-#   storage_pool = var.storage_pool
+  cpu_cores    = 4
+  memory_mb    = 4096
+  disk_size_gb = 15
+  storage_pool = var.storage_pool
 
-#   network_bridge = var.network_bridge
-#   ip_address     = "${local.network_base}.76/24"
-#   gateway        = "${local.network_base}.1"
-#   nameserver     = var.nameserver
+  network_bridge = var.network_bridge
+  ip_address     = "${local.network_base}.76/24"
+  gateway        = "${local.network_base}.1"
+  nameserver     = var.nameserver
 
-#   ciuser         = var.ciuser
-#   cipassword     = var.cipassword
-#   ssh_public_key = join("\n", var.ssh_public_key)
-#   tags           = var.environment
+  ciuser         = var.ciuser
+  cipassword     = var.cipassword
+  ssh_public_key = join("\n", var.ssh_public_key)
+  tags           = var.environment
 
-#   description = "K8s Clusters Load Balancer - ${local.environment}"
-# }
-
+  description = "K8s Clusters Load Balancer - ${local.environment}"
+}
