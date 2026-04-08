@@ -1,0 +1,10 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+proxmox_api_url              = "https://your-proxmox:8006/api2/json"
+proxmox_api_token_id         = "terraform@pve"
+proxmox_api_token_secret     = "your-password"
+proxmox_tls_insecure         = true
+
+ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAA... your-email@example.com"
+
+environment = "dev"

@@ -1,0 +1,28 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Proxmox Configuration
+proxmox_api_url          = "https://ip:port/api2/json"
+proxmox_api_token_id     = "terraform@pve"
+proxmox_api_token_secret = "your-password"
+proxmox_tls_insecure     = true
+proxmox_node             = "pve"
+
+# VM Configuration
+vm_template    = "ubuntu-cloud"
+storage_pool   = "SlowZ1"
+network_bridge = "vmbr1"
+nameserver     = "1.1.1.1,1.0.0.1"
+display_type   = "std"
+
+# User Configuration
+ciuser     = "user"
+cipassword = "password"
+
+# SSH Configuration
+ssh_public_key = [
+  "ssh-ed25519 AAAA",
+  "ssh-rsa AAAAB"
+]
+
+# Project Configuration
+project_name = "my-dev-project"
