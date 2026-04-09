@@ -41,6 +41,7 @@ module "k8s_manager_1" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.51/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -131,6 +132,7 @@ module "k8s_worker_1" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.61/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -161,6 +163,7 @@ module "k8s_worker_2" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.62/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -191,6 +194,7 @@ module "k8s_worker_3" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.63/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver

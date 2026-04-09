@@ -82,11 +82,11 @@ variable "storage_pool" {
 variable "network_bridge" {
   description = "Network bridge"
   type        = string
-  default     = "vmbr"
+  default     = "vmbr0"
 }
 
 // VLAN Tag
-variable "vlan_tag" {
+variable "vlan_id" {
   description = "VLAN tag for VM network"
   type = number
   default = 10

@@ -41,6 +41,7 @@ module "per_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.70/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -71,6 +72,7 @@ module "database_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.71/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -101,6 +103,7 @@ module "s3_storage_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.72/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -131,6 +134,7 @@ module "development_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.73/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -161,6 +165,7 @@ module "reverse_proxy_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.74/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver

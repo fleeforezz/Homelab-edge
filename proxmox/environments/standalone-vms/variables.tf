@@ -85,6 +85,13 @@ variable "network_bridge" {
   default     = "vmbr1"
 }
 
+// VLAN Tag
+variable "vlan_id" {
+  description = "VLAN tag for VM network"
+  type = number
+  default = 10
+}
+
 // DNS nameserver variable
 variable "nameserver" {
   description = "DNS servers"

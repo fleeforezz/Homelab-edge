@@ -41,6 +41,7 @@ module "gitlab_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.77/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -71,6 +72,7 @@ module "jenkins_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.78/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -101,6 +103,7 @@ module "cockpit_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.80/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -131,6 +134,7 @@ module "k8s_lb_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
+  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.76/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver

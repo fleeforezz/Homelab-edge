@@ -58,8 +58,14 @@ variable "storage_pool" {
 
 variable "network_bridge" {
   type        = string
-  default     = "vmbr1"
+  default     = "vmbr0"
   description = "Network bridge"
+}
+
+variable "vlan-tag" {
+  type = number
+  default = 10
+  description = "VLAN tags"
 }
 
 variable "ip_address" {
