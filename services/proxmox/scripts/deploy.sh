@@ -2,12 +2,17 @@
 
 set -e # Exit on any error
 
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Go up to proxmox root
+BASE_DIR="$SCRIPT_DIR/.."
+
 # Default values
-ENVIRONMENT="standalone_vms"
+ENVIRONMENT="${ENVIRONMENT//-/_}"
 AUTO_APPROVE=false
 PLAN_ONLY=false
 VERBOSE=false
-WORKING_DIR=""
+WORKING_DIR="$BASE_DIR/environments/$ENVIRONMENT"
 
 # Colors for output
 RED='\033[0;31m'
@@ -60,7 +65,7 @@ EOF
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
-        dev|k8s-clusters|standalone-vms|standalone-docker-vms)
+        k8s-clusters|standalone-vms|standalone-docker-vms)
             ENVIRONMENT="$1"
             shift
             ;;
@@ -93,6 +98,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Set working directory if not specified
+
 if [[ -z "$WORKING_DIR" ]]; then
     WORKING_DIR="./environments/$ENVIRONMENT"
 fi
@@ -103,14 +109,93 @@ if [[ ! -d "$WORKING_DIR" ]]; then
     exit 1
 fi
 
-# Check if terraform.tfvars exists
-if [[ ! -f "$WORKING_DIR/terraform.tfvars" ]]; then
-    print_warning "terraform.tfvars not found in $WORKING_DIR"
-    if [[ -f "$WORKING_DIR/terraform.tfvars.example" ]]; then
-        print_warning "Found terraform.tfvars.example. Please copy and configure it:"
-        print_warning "cp $WORKING_DIR/terraform.tfvars.example $WORKING_DIR/terraform.tfvars"
+# Function to create terraform.tfvars
+create_tfvars() {
+    local tfvars_file="$WORKING_DIR/terraform.tfvars"
+
+    print_warning "terraform.tfvars not found. Creating new one..."
+
+    # ─────────────────────────────────────────
+    # Prompt user input
+    # ─────────────────────────────────────────
+
+    read -rp "Proxmox API URL: " proxmox_api_url
+    if [[ -z "$proxmox_api_url" ]]; then
+        print_error "API URL cannot be empty"
         exit 1
     fi
+    read -rp "Proxmox API Token ID: " proxmox_api_token_id
+    read -rp "Proxmox API Token Secret: " proxmox_api_token_secret
+    echo ""
+    read -rp "TLS Insecure (true/false): " proxmox_tls_insecure
+    if [[ "$proxmox_tls_insecure" != "true" && "$proxmox_tls_insecure" != "false" ]]; then
+        print_error "TLS must be true or false"
+        exit 1
+    fi
+    read -rp "Proxmox Node: " proxmox_node
+
+    echo ""
+
+    read -rp "VM Template: " vm_template
+    read -rp "Storage Pool: " storage_pool
+    read -rp "Network Bridge: " network_bridge
+    read -rp "Nameserver (comma separated): " nameserver
+    read -rp "Display Type: " display_type
+
+    echo ""
+
+    read -rp "CI User: " ciuser
+    read -rp "CI Password: " cipassword
+
+    echo ""
+
+    echo "Enter SSH Public Keys (empty line to finish):"
+    ssh_keys=()
+    while true; do
+        read -rp "> " key
+        [[ -z "$key" ]] && break
+        ssh_keys+=("$key")
+    done
+
+    echo ""
+
+    read -rp "Project Name: " project_name
+
+    # ─────────────────────────────────────────
+    # Write file
+    # ─────────────────────────────────────────
+
+    {
+        echo "proxmox_api_url          = \"$proxmox_api_url\""
+        echo "proxmox_api_token_id     = \"$proxmox_api_token_id\""
+        echo "proxmox_api_token_secret = \"$proxmox_api_token_secret\""
+        echo "proxmox_tls_insecure     = $proxmox_tls_insecure"
+        echo "proxmox_node             = \"$proxmox_node\""
+        echo ""
+        echo "vm_template    = \"$vm_template\""
+        echo "storage_pool   = \"$storage_pool\""
+        echo "network_bridge = \"$network_bridge\""
+        echo "nameserver     = \"$nameserver\""
+        echo "display_type   = \"$display_type\""
+        echo ""
+        echo "ciuser     = \"$ciuser\""
+        echo "cipassword = \"$cipassword\""
+        echo ""
+        echo "ssh_public_key = ["
+        for key in "${ssh_keys[@]}"; do
+            echo "  \"$key\","
+        done
+        echo "]"
+        echo ""
+        echo "project_name = \"$project_name\""
+    } > "$tfvars_file"
+
+    print_success "terraform.tfvars created at $tfvars_file"
+}
+
+# Check if terraform.tfvars exists
+if [[ ! -f "$WORKING_DIR/terraform.tfvars" ]]; then
+    create_tfvars
 fi
 
 # Function to run terraform command with proper error handling
@@ -119,9 +204,9 @@ run_terraform() {
     print_status "Running: terraform $cmd"
 
     if [[ "$VERBOSE" == "true" ]]; then
-        terraform $cmd
+        terraform -chdir="$WORKING_DIR" $cmd
     else
-        terraform $cmd > /tmp/terraform_output.log 2>&1 || {
+        terraform -chdir="$WORKING_DIR" $cmd > /tmp/terraform_output.log 2>&1 || {
             print_error "Terraform command failed. Output:"
             cat /tmp/terraform_output.log
             exit 1
@@ -178,7 +263,7 @@ check_prerequisites() {
     local missing_files=()
 
     for file in "${required_files[@]}"; do
-        if [[ ! -f "$file" ]]; then
+        if [[ ! -f "$WORKING_DIR/$file" ]]; then
             missing_files+=("$file")
             print_error "Required file not found: $PWD/$file"
         else 

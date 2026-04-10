@@ -2,6 +2,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 SERVICES_DIR="$SCRIPT_DIR/services"
+PROXMOX_DEPLOY_SCRIPT="$SERVICES_DIR/proxmox/scripts/deploy.sh"
 
 # Reset terminal colors on exit or crash
 trap 'echo -ne "\033[0m"' EXIT
@@ -72,3 +73,36 @@ for i in "${!OPTIONS[@]}"; do
 done
 echo -ne "${C_MAIN}${C_BOLD} ╰─ ${C_YELLOW}Choice: ${C_RESET}"
 read -rp "" SELECTION
+
+case $SELECTION in 
+    1)
+        info "Setting up Proxmox cronjob..."
+        # Call cronjob
+        ;;
+    2)
+        info "Deploying Proxmox VMs with Terraform..."
+
+        if [ -f "$PROXMOX_DEPLOY_SCRIPT" ]; then
+            chmod +x "$PROXMOX_DEPLOY_SCRIPT"
+            $PROXMOX_DEPLOY_SCRIPT
+            success "Terraform deployment completed"
+        else
+            error "Deploy script not found at $PROXMOX_DEPLOY_SCRIPT"
+        fi
+        ;;
+    3)
+        info "Updating apt packages"
+        ;;
+    4)
+        info "Setting up Proxmox networking"
+        ;;
+    5)
+        info "Backing up plan"
+        ;;
+    6)
+        info "Installing kubenetes"
+        ;;
+    *)
+        error "Invalid selection"
+        ;;
+esac
