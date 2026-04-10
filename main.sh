@@ -6,7 +6,9 @@ FUNCTION_DIR="$SCRIPT_DIR/funcs"
 
 PROXMOX_DEPLOY_SCRIPT="$SERVICES_DIR/proxmox/scripts/deploy.sh"
 
+# Load shared functions
 source "$FUNCTION_DIR/ui.sh"
+source "$FUNCTION_DIR/proxmox-deploy.sh"
 
 # Reset terminal colors on exit or crash
 trap 'echo -ne "\033[0m"' EXIT
@@ -85,7 +87,25 @@ case $SELECTION in
         ;;
     2)
         info "Deploying Proxmox VMs with Terraform..."
-        $FUNCTION_DIR/proxmox-deploy.sh "$PROXMOX_DEPLOY_SCRIPT"
+        ENV_OPTIONS=("k8s-clusters" "standalone-docker-vms" "standalone-vms")
+
+        info "Select environment..."
+
+        for i in "${!ENV_OPTIONS[@]}"; do
+            echo -e "${C_MAIN}${C_BOLD} │  ${C_ACCENT}$((i+1)) ${C_DIM}❯ ${C_RESET}${ENV_OPTIONS[$i]}"
+        done
+
+        echo -ne "${C_MAIN}${C_BOLD} ╰─ ${C_YELLOW}Env choice: ${C_RESET}"
+        read -rp "" ENV_SELECTION
+
+        ENV="${ENV_OPTIONS[$((ENV_SELECTION-1))]}"
+
+        if [ -z "$ENV" ]; then
+            error "Invalid environment selection"
+            exit 1
+        fi
+
+        proxmox_deploy "$PROXMOX_DEPLOY_SCRIPT" success error "$ENV"
         ;;
     3)
         info "Updating apt packages"
