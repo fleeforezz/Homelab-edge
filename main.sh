@@ -2,6 +2,8 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 SERVICES_DIR="$SCRIPT_DIR/services"
+FUNCTION_DIR="$SCRIPT_DIR/funcs"
+
 PROXMOX_DEPLOY_SCRIPT="$SERVICES_DIR/proxmox/scripts/deploy.sh"
 
 # Reset terminal colors on exit or crash
@@ -81,14 +83,7 @@ case $SELECTION in
         ;;
     2)
         info "Deploying Proxmox VMs with Terraform..."
-
-        if [ -f "$PROXMOX_DEPLOY_SCRIPT" ]; then
-            chmod +x "$PROXMOX_DEPLOY_SCRIPT"
-            $PROXMOX_DEPLOY_SCRIPT
-            success "Terraform deployment completed"
-        else
-            error "Deploy script not found at $PROXMOX_DEPLOY_SCRIPT"
-        fi
+        $FUNCTION_DIR/proxmox-deploy.sh
         ;;
     3)
         info "Updating apt packages"
