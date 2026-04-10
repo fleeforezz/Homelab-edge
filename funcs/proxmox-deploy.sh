@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Load shared functions
+source "$(dirname "$0")/ui.sh"
+
 proxmox_deploy() {
     local deploy_script="$1"
     local success_fn="$2"
@@ -10,8 +13,8 @@ proxmox_deploy() {
         "$deploy_script"
         "$success_fn" "Terraform deployment completed"
     else
-        "$error_fn" "Deploy script not found at "$deploy_script""
+        "$error_fn" "Deploy script not found at $deploy_script"
     fi
 }
 
-proxmox_deploy "$PROXMOX_DEPLOY_SCRIPT" success error
+proxmox_deploy "$1" success error

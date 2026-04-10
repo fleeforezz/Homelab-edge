@@ -6,6 +6,8 @@ FUNCTION_DIR="$SCRIPT_DIR/funcs"
 
 PROXMOX_DEPLOY_SCRIPT="$SERVICES_DIR/proxmox/scripts/deploy.sh"
 
+source "$FUNCTION_DIR/ui.sh"
+
 # Reset terminal colors on exit or crash
 trap 'echo -ne "\033[0m"' EXIT
 
@@ -83,7 +85,7 @@ case $SELECTION in
         ;;
     2)
         info "Deploying Proxmox VMs with Terraform..."
-        $FUNCTION_DIR/proxmox-deploy.sh
+        $FUNCTION_DIR/proxmox-deploy.sh "$PROXMOX_DEPLOY_SCRIPT"
         ;;
     3)
         info "Updating apt packages"
