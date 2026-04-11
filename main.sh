@@ -9,6 +9,7 @@ PROXMOX_DEPLOY_SCRIPT="$SERVICES_DIR/proxmox/scripts/deploy.sh"
 # Load shared functions
 source "$FUNCTION_DIR/ui.sh"
 source "$FUNCTION_DIR/proxmox-deploy.sh"
+source "$FUNCTION_DIR/proxmox-cronjob.sh"
 
 # Reset terminal colors on exit or crash
 trap 'echo -ne "\033[0m"' EXIT
@@ -84,6 +85,7 @@ case $SELECTION in
     1)
         info "Setting up Proxmox cronjob..."
         # Call cronjob
+        proxmox_cronjob
         ;;
     2)
         info "Deploying Proxmox VMs with Terraform..."
