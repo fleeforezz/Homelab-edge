@@ -8,11 +8,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$SCRIPT_DIR/.."
 
 # Default values
-ENVIRONMENT="${ENVIRONMENT//-/_}"
+ENVIRONMENT=""
 AUTO_APPROVE=false
 PLAN_ONLY=false
 VERBOSE=false
-WORKING_DIR="$BASE_DIR/environments/$ENVIRONMENT"
 
 # Colors for output
 RED='\033[0;31m'
@@ -96,6 +95,8 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+WORKING_DIR="$BASE_DIR/environments/$ENVIRONMENT"
 
 # Set working directory if not specified
 

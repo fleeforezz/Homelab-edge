@@ -62,7 +62,7 @@ variable "network_bridge" {
   description = "Network bridge"
 }
 
-variable "vlan-tag" {
+variable "vlan_tag" {
   type = number
   default = 10
   description = "VLAN tags"
