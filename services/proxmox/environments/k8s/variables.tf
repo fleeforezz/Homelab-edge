@@ -41,7 +41,7 @@ variable "proxmox_node" {
 // Environment name variable
 variable "environment" {
   type        = string
-  default     = "k8s-cluster"
+  default     = "k8s"
   description = "Environment name"
 }
 
@@ -82,14 +82,7 @@ variable "storage_pool" {
 variable "network_bridge" {
   description = "Network bridge"
   type        = string
-  default     = "vmbr0"
-}
-
-// VLAN Tag
-variable "vlan_id" {
-  description = "VLAN tag for VM network"
-  type = number
-  default = 10
+  default     = "vmbr1"
 }
 
 // DNS nameserver variable
@@ -118,7 +111,7 @@ variable "ssh_public_key" {
 #======================
 variable "project_name" {
   type        = string
-  default     = "proxmox-infra"
+  default     = "Kubernete Clusters"
   description = "Project name for resource naming"
 }
 

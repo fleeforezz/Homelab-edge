@@ -22,18 +22,6 @@ output "database_server" {
   }
 }
 
-#==================
-# S3 Storage Server
-#==================
-output "s3_storage_server" {
-  description = "S3 Storage Server"
-  value = {
-    name       = module.s3_storage_server.vm_name
-    ip_address = module.s3_storage_server.ip_address
-    vm_id      = module.s3_storage_server.vm_id
-  }
-}
-
 #===================
 # Development Server
 #===================

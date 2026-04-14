@@ -1,6 +1,6 @@
 locals {
   environment  = "sv"
-  network_base = "10.0.10"
+  network_base = "10.0.1"
   common_tags = {
     Environment = local.environment
     Managed_by  = "terraform"
@@ -27,10 +27,10 @@ provider "proxmox" {
 # Gitlab Server
 #==============
 module "gitlab_server" {
-  source = "../../modules/proxmox_vm"
+  source = "../../modules/proxmox-vm"
 
   vmid           = 400
-  vm_name        = "gitlab"
+  vm_name        = "Gitlab"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
@@ -41,7 +41,6 @@ module "gitlab_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.77/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -58,10 +57,10 @@ module "gitlab_server" {
 # Jenkins Server
 #===============
 module "jenkins_server" {
-  source = "../../modules/proxmox_vm"
+  source = "../../modules/proxmox-vm"
 
   vmid           = 401
-  vm_name        = "jenkins"
+  vm_name        = "Jenkins"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
@@ -72,7 +71,6 @@ module "jenkins_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.78/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -92,7 +90,7 @@ module "cockpit_server" {
   source = "../../modules/proxmox-vm"
 
   vmid           = 402
-  vm_name        = "cockpit"
+  vm_name        = "Cockpit"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
@@ -103,7 +101,6 @@ module "cockpit_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.80/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
@@ -123,7 +120,7 @@ module "k8s_lb_server" {
   source = "../../modules/proxmox-vm"
 
   vmid           = 403
-  vm_name        = "k8s-load-balancer"
+  vm_name        = "K8s-load-balancer"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
@@ -134,7 +131,6 @@ module "k8s_lb_server" {
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  vlan-tag       = var.vlan_id
   ip_address     = "${local.network_base}.76/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver

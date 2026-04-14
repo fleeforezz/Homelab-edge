@@ -23,7 +23,7 @@ resource "proxmox_vm_qemu" "vm" {
   scsihw      = "virtio-scsi-single"
   ciuser      = var.ciuser
   cipassword  = var.cipassword
-  # ciupgrade   = true
+  ciupgrade   = true
 
   # Disk
   disks {
@@ -51,7 +51,7 @@ resource "proxmox_vm_qemu" "vm" {
     sockets = 1
     cores   = var.cpu_cores
     limit   = 0
-    type    = "x86-64-v2-AES"
+    type    = "host"
   }
 
   # Memory
@@ -63,7 +63,6 @@ resource "proxmox_vm_qemu" "vm" {
     bridge   = var.network_bridge
     firewall = true
     model    = "virtio"
-    tag      = var.vlan_tag
   }
   ipconfig0  = "ip=${var.ip_address},gw=${var.gateway}"
   nameserver = var.nameserver

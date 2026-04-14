@@ -35,13 +35,13 @@ variable "proxmox_tls_insecure" {
 variable "proxmox_node" {
   description = "Proxmox node name"
   type        = string
-  default     = "pve1"
+  default     = "pve"
 }
 
 // Environment name variable
 variable "environment" {
   type        = string
-  default     = "standalone-vms"
+  default     = "sv"
   description = "Environment name"
 }
 
@@ -83,13 +83,6 @@ variable "network_bridge" {
   description = "Network bridge"
   type        = string
   default     = "vmbr1"
-}
-
-// VLAN Tag
-variable "vlan_id" {
-  description = "VLAN tag for VM network"
-  type = number
-  default = 10
 }
 
 // DNS nameserver variable

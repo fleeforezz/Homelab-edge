@@ -22,18 +22,6 @@ output "jenkins_server" {
   }
 }
 
-#=====================
-# Pi-Hole Server
-#=====================
-# output "pihole_server" {
-#   description = "Pi-Hole Server"
-#   value = {
-#     name       = module.pihole_server.vm_name
-#     ip_address = module.pihole_server.ip_address
-#     vm_id      = module.pihole_server.vm_id
-#   }
-# }
-
 #================
 # Cockpit Server
 #================
@@ -46,26 +34,14 @@ output "cockpit_server" {
   }
 }
 
-#================
-# HomeAssistant Server
-#================
-# output "homeassistant_server" {
-#   description = "HomeAssistant Server"
-#   value = {
-#     name       = module.homeassistant_server.vm_name
-#     ip_address = module.homeassistant_server.ip_address
-#     vm_id      = module.homeassistant_server.vm_id
-#   }
-# }
-
 #===========================
 # K8s Clusters Load Balancer
 #===========================
 output "k8s_load_balancer" {
   description = "K8s Clusters Load Balancer"
   value = {
-    name       = module.k8s_load_balancer.vm_name
-    ip_address = module.k8s_load_balancer.ip_address
-    vm_id      = module.k8s_load_balancer.vm_id
+    name       = module.k8s_lb_server.vm_name
+    ip_address = module.k8s_lb_server.ip_address
+    vm_id      = module.k8s_lb_server.vm_id
   }
 }

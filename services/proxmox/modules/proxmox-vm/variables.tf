@@ -62,12 +62,6 @@ variable "network_bridge" {
   description = "Network bridge"
 }
 
-variable "vlan_tag" {
-  type = number
-  default = 10
-  description = "VLAN tags"
-}
-
 variable "ip_address" {
   type        = string
   description = "The static IP address of the VM with CIDR suffix (e.g. 10.0.1.51/24)"
