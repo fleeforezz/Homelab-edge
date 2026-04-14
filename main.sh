@@ -17,11 +17,15 @@ trap 'echo -ne "\033[0m"' EXIT
 # Options
 OPTIONS=(
     "Setup Proxmox cronjob"
-    "Deploy proxmox VMs with terraform"
-    "Update apt packages"
     "Setup Proxmox networking"
-    "Backup plan"
+    "Deploy proxmox VMs"
+    "VMs health check"
+    "VMs network check"
+    "Update apt packages"
     "Install kubenetes"
+    "Install Docker & Docker Compose"
+    "Backup plan"
+    "Restore plan"
 )
 
 # ─────────────────────────────────────────────────────────────────────────────
