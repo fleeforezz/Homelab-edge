@@ -1,5 +1,5 @@
 locals {
-  environment  = "standalone-vms"
+  environment  = "sv"
   network_base = "10.0.10"
   common_tags = {
     Environment = local.environment
@@ -97,7 +97,7 @@ module "cockpit_server" {
   clone_template = var.vm_template
   display_type   = var.display_type
 
-  cpu_cores    = 3
+  cpu_cores    = 2
   memory_mb    = 4096
   disk_size_gb = 15
   storage_pool = var.storage_pool

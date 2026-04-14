@@ -1,5 +1,5 @@
 locals {
-  environment  = "k8s-clusters"
+  environment  = "k8s"
   network_base = "10.0.10"
   common_tags = {
     Environment = local.environment
@@ -42,7 +42,7 @@ module "k8s_manager_1" {
 
   network_bridge = var.network_bridge
   vlan_tag       = var.vlan_id
-  ip_address     = "${local.network_base}.51/24"
+  ip_address     = "${local.network_base}.50/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -120,20 +120,20 @@ module "k8s_manager_1" {
 module "k8s_worker_1" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 153
+  vmid           = 160
   vm_name        = "k8s-worker-1"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
 
-  cpu_cores    = 2
-  memory_mb    = 4096
+  cpu_cores    = 4
+  memory_mb    = 8192
   disk_size_gb = 32
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
   vlan_tag       = var.vlan_id
-  ip_address     = "${local.network_base}.61/24"
+  ip_address     = "${local.network_base}.60/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -151,20 +151,20 @@ module "k8s_worker_1" {
 module "k8s_worker_2" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 154
+  vmid           = 161
   vm_name        = "k8s-worker-2"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
 
-  cpu_cores    = 2
-  memory_mb    = 4096
+  cpu_cores    = 4
+  memory_mb    = 8192
   disk_size_gb = 32
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
   vlan_tag       = var.vlan_id
-  ip_address     = "${local.network_base}.62/24"
+  ip_address     = "${local.network_base}.61/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -182,20 +182,20 @@ module "k8s_worker_2" {
 module "k8s_worker_3" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 155
+  vmid           = 162
   vm_name        = "k8s-worker-3"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
 
-  cpu_cores    = 2
-  memory_mb    = 4096
+  cpu_cores    = 4
+  memory_mb    = 8192
   disk_size_gb = 32
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
   vlan_tag       = var.vlan_id
-  ip_address     = "${local.network_base}.63/24"
+  ip_address     = "${local.network_base}.62/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 

@@ -89,7 +89,7 @@ case $SELECTION in
         ;;
     2)
         info "Deploying Proxmox VMs with Terraform..."
-        ENV_OPTIONS=("k8s-clusters" "standalone-docker-vms" "standalone-vms")
+        ENV_OPTIONS=("k8s" "sdv" "sv")
 
         info "Select environment..."
 

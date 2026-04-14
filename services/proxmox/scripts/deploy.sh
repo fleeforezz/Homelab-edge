@@ -64,7 +64,7 @@ EOF
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
-        k8s-clusters|standalone-vms|standalone-docker-vms)
+        k8s|sv|sdv)
             ENVIRONMENT="$1"
             shift
             ;;

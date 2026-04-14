@@ -1,5 +1,5 @@
 locals {
-  environment  = "standalone-docker-vms"
+  environment  = "sdv"
   network_base = "10.0.10"
   common_tags = {
     Environment = local.environment
@@ -67,7 +67,7 @@ module "database_server" {
   display_type   = var.display_type
 
   cpu_cores    = 4
-  memory_mb    = 8192
+  memory_mb    = 4096
   disk_size_gb = 15
   storage_pool = var.storage_pool
 
@@ -85,44 +85,13 @@ module "database_server" {
   description = "Databases Server - ${local.environment}"
 }
 
-#==================
-# S3 Storage Server
-#==================
-module "s3_storage_server" {
-  source = "../../modules/proxmox-vm"
-
-  vmid           = 304
-  vm_name        = "S3-storage"
-  target_node    = var.proxmox_node
-  clone_template = var.vm_template
-  display_type   = var.display_type
-
-  cpu_cores    = 4
-  memory_mb    = 8192
-  disk_size_gb = 15
-  storage_pool = var.storage_pool
-
-  network_bridge = var.network_bridge
-  vlan-tag       = var.vlan_id
-  ip_address     = "${local.network_base}.72/24"
-  gateway        = "${local.network_base}.1"
-  nameserver     = var.nameserver
-
-  ciuser         = var.ciuser
-  cipassword     = var.cipassword
-  ssh_public_key = join("\n", var.ssh_public_key)
-  tags           = var.environment
-
-  description = "S3 Storage Server - ${local.environment}"
-}
-
 #===================
 # Development Server
 #===================
 module "development_server" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 304
+  vmid           = 303
   vm_name        = "Development"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
@@ -135,7 +104,7 @@ module "development_server" {
 
   network_bridge = var.network_bridge
   vlan-tag       = var.vlan_id
-  ip_address     = "${local.network_base}.73/24"
+  ip_address     = "${local.network_base}.72/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -153,7 +122,7 @@ module "development_server" {
 module "reverse_proxy_server" {
   source = "../../modules/proxmox-vm"
 
-  vmid           = 305
+  vmid           = 304
   vm_name        = "Reverse-proxy"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
@@ -161,12 +130,12 @@ module "reverse_proxy_server" {
 
   cpu_cores    = 4
   memory_mb    = 4096
-  disk_size_gb = 32
+  disk_size_gb = 15
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
   vlan-tag       = var.vlan_id
-  ip_address     = "${local.network_base}.74/24"
+  ip_address     = "${local.network_base}.73/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
