@@ -10,6 +10,8 @@ PROXMOX_DEPLOY_SCRIPT="$SERVICES_DIR/proxmox/scripts/deploy.sh"
 source "$FUNCTION_DIR/ui.sh"
 source "$FUNCTION_DIR/proxmox-deploy.sh"
 source "$FUNCTION_DIR/proxmox-cronjob.sh"
+source "$FUNCTION_DIR/switch-mirror.sh"
+source "$FUNCTION_DIR/update-apt.sh"
 
 # Reset terminal colors on exit or crash
 trap 'echo -ne "\033[0m"' EXIT
@@ -22,6 +24,7 @@ OPTIONS=(
     "VMs health check"
     "VMs network check"
     "Update apt packages"
+    "Switch Ubuntu mirror to Vietnam"
     "Install kubenetes"
     "Install Docker & Docker Compose"
     "Backup plan"
@@ -74,6 +77,37 @@ header
 
 # Dependency check
 info "Checking dependecies..."
+# Required commands
+REQUIRED_CMDS=("ansible" "terraform")
+
+MISSING_CMDS=()
+
+for cmd in "${REQUIRED_CMDS[@]}"; do
+    if ! command -v "$cmd" &> /dev/null; then
+        MISSING_CMDS+=("$cmd")
+    else
+        substep "$cmd found: $(command -v $cmd)"
+    fi
+done
+
+# If missing → fail early
+if [ ${#MISSING_CMDS[@]} -ne 0 ]; then
+    error "Missing dependencies: ${MISSING_CMDS[*]}"
+    echo -e "${C_YELLOW}Install them before continuing:${C_RESET}"
+
+    for cmd in "${MISSING_CMDS[@]}"; do
+        case $cmd in
+            ansible)
+                echo "  sudo apt update && sudo apt install -y ansible"
+                ;;
+            terraform)
+                echo "  https://developer.hashicorp.com/terraform/downloads"
+                ;;
+        esac
+    done
+
+    exit 1
+fi
 success "Dependencies verified"
 
 # Selection Logic
@@ -123,7 +157,12 @@ case $SELECTION in
         info "Backing up plan"
         ;;
     6)
-        info "Installing kubenetes"
+        info "Updating apt packages"
+        update_apt
+        ;;
+    7)
+        info "Switching Ubuntu mirror to Vietnam"
+        switch_mirror
         ;;
     *)
         error "Invalid selection"

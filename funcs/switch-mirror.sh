@@ -6,9 +6,10 @@ source "$(dirname "$0")/ui.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-update_apt() {
-    PLAYBOOK_PATH="$BASE_DIR/services/ansible/update-apt/playbooks.yml"
-    INVENTORY_PATH="$BASE_DIR/services/ansible/update-apt/host.ini"
+switch_mirror() {
+
+    PLAYBOOK_PATH="$BASE_DIR/services/ansible/switch-mirror/playbooks.yml"
+    INVENTORY_PATH="$BASE_DIR/services/ansible/switch-mirror/host.ini"
 
     if [ ! -f "$PLAYBOOK_PATH" ]; then
         error "Playbook not found: $PLAYBOOK_PATH"
@@ -20,13 +21,13 @@ update_apt() {
         return 1
     fi
 
-    substep "Running apt update..."
+    substep "Running ansible-playbook..."
     ansible-playbook -i "$INVENTORY_PATH" "$PLAYBOOK_PATH"
 
     if [ $? -eq 0 ]; then
-        success "Apt packages updated successfully"
+        success "Mirror switched successfully"
     else
-        error "Update apt failed"
+        error "Ansible playbook failed"
         return 1
     fi
 }

@@ -1,0 +1,29 @@
+- name: Switch Ubuntu mirror to Vietnam
+  hosts: all
+  vars:
+    ansible_host_key_checking: false ##If you get an error about hosts not trusted
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Replace archive mirror
+      replace:
+        path: /etc/apt/sources.list.d/ubuntu.sources
+        regexp: 'http://archive.ubuntu.com/ubuntu'
+        replace: 'http://vn.archive.ubuntu.com/ubuntu'
+
+    - name: Replace security mirror
+      replace:
+        path: /etc/apt/sources.list.d/ubuntu.sources
+        regexp: 'http://security.ubuntu.com/ubuntu'
+        replace: 'http://vn.archive.ubuntu.com/ubuntu'
+
+    - name: Force IPv4 (fix slow network in VN)
+      copy:
+        dest: /etc/apt/apt.conf.d/99force-ipv4
+        content: |
+          Acquire::ForceIPv4 "true";
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
