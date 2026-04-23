@@ -1,60 +1,87 @@
-###############
-# MIDDLEWARES #
-###############
 http:
   middlewares:
-  # Default Security Header  
-    default-security-headers:
+
+    # ========================
+    # GLOBAL DEFAULT (SAFE)
+    # ========================
+    default-security:
       headers:
-        # browserXssFilter: true                            # X-XSS-Protection=1; mode=block
-        contentTypeNosniff: true                          # X-Content-Type-Options=nosniff
-        # forceSTSHeader: true                              # Add the Strict-Transport-Security header
+        contentTypeNosniff: true
         referrerPolicy: "strict-origin-when-cross-origin"
-        stsIncludeSubdomains: true                        # Add includeSubdomains to the Strict-Transport-Security header
-        stsPreload: true                                  # Add preload flag
-        stsSeconds: 31536000                              # Set max-age (1 year)
-        customRequestHeaders:
-          X-Forwarded-Proto: https
-          X-Forwarded-Port: "443"
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        permissionsPolicy: "geolocation=(), camera=(), microphone=()"
 
-  # Https Redirectscheme  
-    https-redirectscheme:
-      redirectScheme:
-        scheme: https
-        permanent: true
+    gzip:
+      compress: {}
 
-  # Jenkins-specific headers
-    jenkins-headers:
+    # ========================
+    # CHAIN (REFERENCE ONLY)
+    # ========================
+    default-chain:
+      chain:
+        middlewares:
+          - default-security
+          - gzip
+
+    # Optional but recommended
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+
+    # ========================
+    # AUTH (for dashboard/admin)
+    # ========================
+    basic-auth:
+      basicAuth:
+        usersFile: "/run/secrets/basic_auth_users"
+
+    # ========================
+    # API / CORS
+    # ========================
+    cors:
       headers:
-        customRequestHeaders:
-          X-Forwarded-Proto: https
-          X-Forwarded-Host: jenkins.hikarimoon.pro  # Your actual domain
-          X-Forwarded-Port: "443"
-          X-Forwarded-Server: jenkins.hikarimoon.pro
-          Connection: "Upgrade"
-          Upgrade: "websocket"
+        accessControlAllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        accessControlAllowHeaders:
+          - "*"
+        accessControlAllowOriginList:
+          - "https://yourdomain.com"
+        accessControlAllowCredentials: true
+        addVaryHeader: true
+
+    # ========================
+    # PROXMOX FIX
+    # ========================
+    proxmox:
+      headers:
         customResponseHeaders:
           X-Frame-Options: SAMEORIGIN
 
-  # Proxmox header
-    proxmox-headers:
-        headers:
-          customRequestHeaders:
-            X-Forwarded-Proto: https
-          customResponseHeaders:
-            X-Frame-Options: SAMEORIGIN
+    # ========================
+    # JENKINS FIX
+    # ========================
+    jenkins:
+      headers:
+        customResponseHeaders:
+          X-Frame-Options: SAMEORIGIN
 
-  # Homepage Security Header  
-    # homepage-security-headers:
-    #   headers:
-    #     browserXssFilter: true
-    #     contentTypeNosniff: true
-    #     forceSTSHeader: true
-    #     referrerPolicy: "strict-origin-when-cross-origin"
-    #     stsIncludeSubdomains: true
-    #     stsPreload: true
-    #     stsSeconds: 31536000
-    #     # More permissive CSP for homepage
-    #     contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' wss: https:;"
-    #     customRequestHeaders:
-    #       X-Forwarded-Proto: https
+    # ========================
+    # STRICT CSP (OPTIONAL)
+    # ========================
+    strict-csp:
+      headers:
+        contentSecurityPolicy: "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline';"
+
+    # ========================
+    # RELAXED CSP (FOR APPS)
+    # ========================
+    relaxed-csp:
+      headers:
+        contentSecurityPolicy: "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
