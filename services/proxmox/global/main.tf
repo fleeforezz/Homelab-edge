@@ -24,24 +24,24 @@ provider "proxmox" {
 }
 
 #================
-# Pi-Hole Server
+# Global Server
 #================
-module "pihole_server" {
+module "monitoring_server" {
   source = "../modules/proxmox-vm"
 
-  vmid           = 405
-  vm_name        = "Pi-hole"
+  vmid           = 300
+  vm_name        = "Monitoring"
   target_node    = var.proxmox_node
   clone_template = var.vm_template
   display_type   = var.display_type
 
-  cpu_cores    = 2
-  memory_mb    = 4096
-  disk_size_gb = 15
+  cpu_cores    = 8
+  memory_mb    = 8192
+  disk_size_gb = 32
   storage_pool = var.storage_pool
 
   network_bridge = var.network_bridge
-  ip_address     = "${local.network_base}.91/24"
+  ip_address     = "${local.network_base}.75/24"
   gateway        = "${local.network_base}.1"
   nameserver     = var.nameserver
 
@@ -50,5 +50,5 @@ module "pihole_server" {
   ssh_public_key = join("\n", var.ssh_public_key)
   tags           = var.environment
 
-  description = "Pi-hole Server - ${local.environment}"
+  description = "Monitoring Server - ${local.environment}"
 }

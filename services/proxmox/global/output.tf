@@ -1,11 +1,11 @@
 #================
 # Cockpit Server
 #================
-output "pihole_server" {
-  description = "Pi-hole Server"
+output "monitoring_server" {
+  description = "Monitoring Server"
   value = {
-    name       = module.pihole_server.vm_name
-    ip_address = module.pihole_server.ip_address
-    vm_id      = module.pihole_server.vm_id
+    name       = module.monitoring_server.vm_name
+    ip_address = module.monitoring_server.ip_address
+    vm_id      = module.monitoring_server.vm_id
   }
 }
