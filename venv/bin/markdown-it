@@ -1,4 +1,4 @@
-#!/home/jso/lab/Homelab-edge/venv/bin/python3
+#!/home/jso/Documents/GitHub/Homelab-edge/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
